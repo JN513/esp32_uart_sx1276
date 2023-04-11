@@ -1,3 +1,6 @@
+#ifndef __LORA_UART_LIBRARY_H__
+#define __LORA_UART_LIBRARY_H__
+
 #include <stdio.h>
 #include <string.h>
 
@@ -18,11 +21,17 @@
 
 #include "driver/uart.h"
 
-#include "uart_lora_library.h"
+#define BUFF_SIZE 1024
+#define PATTERN_CHR_NUM 3
 
-void app_main(void)
-{
-    configUart(17, 18);
+const char *TAG = "SX1276_UART";
 
-    xTaskCreate(uart_event_task, "uart_event_task", 2048, NULL, 12, NULL);
-}
+static QueueHandle_t uart_queue;
+
+static int sendData(const char *data);
+static void configUart(int txpin, int rxpin);
+static void uart_event_task(void *pvParameters);
+static void callback(uint8_t *data, size_t len);
+static void setCallback();
+
+#endif
